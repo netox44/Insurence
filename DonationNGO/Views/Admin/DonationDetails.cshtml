@@ -1,0 +1,55 @@
+﻿@using Insurence.Models
+@model Donation
+@{
+    ViewData["Title"] = "Donation Details";
+    Layout = "_LayoutAdmin";
+}
+
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">Donation Details</h4>
+                    <a href="/Admin/ManageDonations" class="btn btn-outline-primary btn-sm">Back to List</a>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <h6>Donor Information</h6>
+                            <p><strong>Name:</strong> @Model.DonorName</p>
+                            <p><strong>User ID:</strong> @Model.UserId</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Donation Details</h6>
+                            <p><strong>Amount:</strong> $@Model.Amount</p>
+                            <p><strong>Date:</strong> @Model.Date.ToString("MMM dd, yyyy")</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Program Information</h6>
+                            <p><strong>Program:</strong> @Model.Program</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Payment Information</h6>
+                            <p><strong>Method:</strong> @Model.PaymentMethod</p>
+                            <p><strong>Status:</strong> 
+                                @if (Model.Status == "Completed")
+                                {
+                                    <span class="badge bg-success">Completed</span>
+                                }
+                                else if (Model.Status == "Pending")
+                                {
+                                    <span class="badge bg-warning">Pending</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">@Model.Status</span>
+                                }
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

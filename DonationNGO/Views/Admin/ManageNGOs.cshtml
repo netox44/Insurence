@@ -1,0 +1,222 @@
+﻿@model IEnumerable<Insurence.Models.Ngo>
+
+@{
+    Layout = "_LayoutAdmin";
+    ViewData["Title"] = "Manage Insurance";
+}
+<a asp-controller="Admin" asp-action="CreateNGO" class="btn btn-primary">
+    <i class="fas fa-plus me-2"></i>Add New Insurance
+</a>
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">Insurance</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Insurance</th>
+                        <th>Focus Area</th>
+                        <th>Contact</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var ngo in Model)
+                    {
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-globe-americas text-primary fa-lg"></i>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h6 class="mb-0">@ngo.Name</h6>
+                                        <small class="text-muted">@ngo.FocusArea</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>@ngo.FocusArea</td>
+                            <td>@ngo.Email</td>
+                            <td>
+                                @if (ngo.Status == "Active")
+                                {
+                                    <span class="badge bg-success">Active</span>
+                                }
+                                else if (ngo.Status == "Review")
+                                {
+                                    <span class="badge bg-warning">Review</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">@ngo.Status</span>
+                                }
+                            </td>
+                            <td>@ngo.PartnershipDate.ToString("MMM dd, yyyy")</td>
+                            <td>
+                                <div class="btn-group">
+                                    <a asp-action="EditNGO" asp-route-id="@ngo.Id" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a asp-action="DeleteNGO" asp-route-id="@ngo.Id" class="btn btn-sm btn-outline-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center">No Insurance found.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add data labels for mobile table view
+            function setupMobileTable() {
+                if (window.innerWidth <= 576) {
+                    const headers = ['Organization', 'Focus Area', 'Contact', 'Status', 'Partnership Date', 'Actions'];
+                    const rows = document.querySelectorAll('.table tbody tr');
+
+                    rows.forEach(row => {
+                        const cells = row.querySelectorAll('td');
+                        cells.forEach((cell, index) => {
+                            if (headers[index]) {
+                                cell.setAttribute('data-label', headers[index]);
+                            }
+                        });
+                    });
+                }
+            }
+
+            // Initial setup
+            setupMobileTable();
+
+            // Update on resize
+            window.addEventListener('resize', setupMobileTable);
+
+            // Enhanced search functionality
+            const searchForm = document.querySelector('form[method="get"]');
+            const searchInput = document.querySelector('input[name="searchQuery"]');
+
+            if (searchInput) {
+                // Add debounced search
+                let searchTimeout;
+                searchInput.addEventListener('input', function() {
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(() => {
+                        searchForm.submit();
+                    }, 500);
+                });
+
+                // Clear search functionality
+                if (searchInput.value) {
+                    const clearBtn = document.createElement('button');
+                    clearBtn.type = 'button';
+                    clearBtn.className = 'btn btn-sm btn-outline-secondary position-absolute';
+                    clearBtn.innerHTML = '<i class="fas fa-times"></i>';
+                    clearBtn.style.right = '10px';
+                    clearBtn.style.top = '50%';
+                    clearBtn.style.transform = 'translateY(-50%)';
+                    clearBtn.addEventListener('click', function() {
+                        searchInput.value = '';
+                        searchForm.submit();
+                    });
+
+                    searchInput.parentElement.style.position = 'relative';
+                    searchInput.style.paddingRight = '40px';
+                    searchInput.parentElement.appendChild(clearBtn);
+                }
+            }
+
+            // Modal enhancement
+            const addNgoModal = document.getElementById('addNgoModal');
+            if (addNgoModal) {
+                addNgoModal.addEventListener('shown.bs.modal', function() {
+                    const firstInput = this.querySelector('input, select, textarea');
+                    if (firstInput) {
+                        firstInput.focus();
+                    }
+                });
+
+                // Form validation enhancement
+                const modalForm = addNgoModal.querySelector('form');
+                if (modalForm) {
+                    modalForm.addEventListener('submit', function(e) {
+                        const requiredFields = this.querySelectorAll('[required]');
+                        let isValid = true;
+
+                        requiredFields.forEach(field => {
+                            if (!field.value.trim()) {
+                                isValid = false;
+                                field.classList.add('is-invalid');
+                            } else {
+                                field.classList.remove('is-invalid');
+                            }
+                        });
+
+                        if (!isValid) {
+                            e.preventDefault();
+
+                            // Show error message
+                            const errorDiv = document.createElement('div');
+                            errorDiv.className = 'alert alert-danger alert-dismissible fade show mt-3';
+                            errorDiv.innerHTML = `
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                Please fill in all required fields.
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            `;
+
+                            modalForm.appendChild(errorDiv);
+                        }
+                    });
+                }
+            }
+
+            // Row click functionality (excluding action buttons)
+            const tableRows = document.querySelectorAll('.table tbody tr');
+            tableRows.forEach(row => {
+                row.addEventListener('click', function(e) {
+                    // Don't trigger if clicking on action buttons
+                    if (!e.target.closest('.btn-group') && !e.target.closest('a')) {
+                        const ngoId = this.querySelector('a[asp-action="EditNGO"]')?.getAttribute('href')?.split('/').pop();
+                        if (ngoId) {
+                            window.location.href = `/Admin/EditNGO/${ngoId}`;
+                        }
+                    }
+                });
+            });
+
+            // Status badge tooltips
+            const badges = document.querySelectorAll('.badge');
+            badges.forEach(badge => {
+                badge.setAttribute('title', `Status: ${badge.textContent}`);
+            });
+
+            // Auto-focus on search input
+            if (searchInput && !searchInput.value) {
+                setTimeout(() => {
+                    searchInput.focus();
+                }, 100);
+            }
+        });
+
+        // Function to confirm NGO deletion
+        function confirmDelete(ngoId, ngoName) {
+            if (confirm(`Are you sure you want to delete "${ngoName}"? This action cannot be undone.`)) {
+                window.location.href = `/Admin/DeleteNGO/${ngoId}`;
+            }
+        }
+    </script>
+}

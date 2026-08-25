@@ -1,0 +1,46 @@
+﻿@model Insurence.Models.Ngo
+
+@{
+    Layout = "_LayoutAdmin";
+    ViewData["Title"] = "Edit Insurance";
+}
+
+<h4>Edit Insurance</h4>
+
+<form asp-action="EditNGO" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="FocusArea" class="form-label"></label>
+        <input asp-for="FocusArea" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Phone" class="form-label"></label>
+        <input asp-for="Phone" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Website" class="form-label"></label>
+        <input asp-for="Website" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Status" class="form-label"></label>
+        <select asp-for="Status" class="form-select">
+            <option value="Active">Active</option>
+            <option value="Review">Review</option>
+            <option value="Disabled">Disabled</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a asp-action="ManageNGOs" class="btn btn-secondary">Cancel</a>
+</form>

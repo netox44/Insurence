@@ -1,0 +1,60 @@
+﻿@model List<Insurence.Models.Donation>
+
+@{
+    Layout = "_LayoutUser";
+    ViewData["Title"] = "My Insurance";
+}
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-info">
+        You have not made any Insurance yet.
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>Insurance</th>
+                    <th>Amount ($)</th>
+                    <th>Payment Method</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    var item = Model[i];
+
+                    <tr>
+                        <td>@(i + 1)</td>
+                        <td>@item.Program</td>
+                        <td>@item.Amount.ToString("F2")</td>
+                        <td>@item.PaymentMethod</td>
+                        <td>@item.Date.ToString("dd MMM yyyy, hh:mm tt")</td>
+
+                        <td>
+                            @if (item.Status?.ToLower() == "completed")
+                            {
+                                <span class="badge bg-success">Completed</span>
+                            }
+                            else if (item.Status?.ToLower() == "pending")
+                            {
+                                <span class="badge bg-warning text-dark">Pending</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Failed</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

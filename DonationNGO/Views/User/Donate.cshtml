@@ -1,0 +1,232 @@
+﻿@using Insurence.Models
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
+
+@{
+    Layout = "_LayoutUser";
+    ViewData["Title"] = "Make a Insurance";
+}
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @ViewBag.Message
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @ViewBag.Error
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="row g-4">
+    <!-- Causes -->
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Select a Insurance</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="card cause-card border-2">
+                            <div class="card-body text-center p-4">
+                                <i class="fas fa-graduation-cap fa-3x text-primary mb-3"></i>
+                                <h5>Life Insurance</h5>
+                                <p class="text-muted mb-3">Protects family financially in case of death.</p>
+                                <button type="button" class="btn btn-outline-primary w-100" data-cause="Education for All">Select Cause</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card cause-card border-2">
+                            <div class="card-body text-center p-4">
+                                <i class="fas fa-heartbeat fa-3x text-primary mb-3"></i>
+                                <h5>Health Insurance</h5>
+                                <p class="text-muted mb-3">Covers medical, hospital, and treatment expenses.</p>
+                                <button type="button" class="btn btn-outline-primary w-100" data-cause="Healthcare Access">Select Cause</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card cause-card border-2">
+                            <div class="card-body text-center p-4">
+                                <i class="fas fa-leaf fa-3x text-primary mb-3"></i>
+                                <h5>Vehicle Insurance</h5>
+                                <p class="text-muted mb-3">Includes car, bike, and commercial vehicle coverage.</p>
+                                <button type="button" class="btn btn-outline-primary w-100" data-cause="Environmental Protection">Select Cause</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card cause-card border-2">
+                            <div class="card-body text-center p-4">
+                                <i class="fas fa-home fa-3x text-primary mb-3"></i>
+                                <h5>Home Insurance</h5>
+                                <p class="text-muted mb-3">Protects house and property from damage or theft.</p>
+                                <button type="button" class="btn btn-outline-primary w-100" data-cause="Disaster Relief">Select Cause</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card cause-card border-2">
+                            <div class="card-body text-center p-4">
+                                <i class="fas fa-home fa-3x text-primary mb-3"></i>
+                                <h5>Travel Insurance</h5>
+                                <p class="text-muted mb-3">Covers medical emergencies and losses during travel.</p>
+                                <button type="button" class="btn btn-outline-primary w-100" data-cause="Disaster Relief">Select Cause</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card cause-card border-2">
+                            <div class="card-body text-center p-4">
+                                <i class="fas fa-home fa-3x text-primary mb-3"></i>
+                                <h5>Education Insurance</h5>
+                                <p class="text-muted mb-3">Secures children’s education expenses in the future</p>
+                                <button type="button" class="btn btn-outline-primary w-100" data-cause="Disaster Relief">Select Cause</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Donation Form -->
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Insurance Details</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" asp-action="Donate">
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" name="UserId" value="@UserManager.GetUserId(User)" />
+
+                    <div class="mb-3">
+                        <label class="form-label">Selected Insurance</label>
+                        <input type="text" class="form-control" id="selectedCause" name="cause" readonly placeholder="Select a Insurance from the left" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Insurance Amount</label>
+                        <div class="btn-group w-100 mb-2">
+                            <button type="button" class="btn btn-outline-primary amount-btn" data-amount="25">$25 per month</button>
+                            <button type="button" class="btn btn-outline-primary amount-btn" data-amount="50">$50 per month</button>
+                            <button type="button" class="btn btn-outline-primary amount-btn" data-amount="100">$100 per month</button>
+                        </div>
+                        <input type="number" class="form-control" id="amount" name="amount" placeholder="Or enter custom amount" min="1" step="0.01" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Payment Method</label>
+                        <select class="form-select" name="paymentMethod" required>
+                            <option value="">Select payment method</option>
+                            <option value="Credit Card">Credit Card</option>
+                            <option value="PayPal">PayPal</option>
+                            <option value="Bank Transfer">Bank Transfer</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg w-100">
+                        <i class="fas fa-donate me-2"></i>Complete Insurance
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .cause-card {
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+        .cause-card:hover {
+            transform: translateY(-5px);
+            border-color: #0d6efd;
+        }
+
+        .cause-card.selected {
+            border-color: #0d6efd;
+            background-color: #e7f1ff;
+        }
+
+    .amount-btn.active {
+        background-color: #0d6efd;
+        color: #fff;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        // =============================
+        // Select Cause
+        // =============================
+        const causeCards = document.querySelectorAll('.cause-card');
+        const selectedCauseInput = document.getElementById('selectedCause');
+
+        causeCards.forEach(card => {
+            card.addEventListener('click', function () {
+                causeCards.forEach(c => c.classList.remove('selected'));
+                this.classList.add('selected');
+
+                selectedCauseInput.value = this.querySelector('h5').textContent;
+
+                this.style.transform = 'translateY(-5px) scale(1.02)';
+                setTimeout(() => { this.style.transform = 'translateY(-5px)'; }, 300);
+            });
+        });
+
+        // =============================
+        // Select Amount
+        // =============================
+        const amountBtns = document.querySelectorAll('.amount-btn');
+        const amountInput = document.getElementById('amount');
+
+        amountBtns.forEach(btn => {
+            btn.addEventListener('click', function () {
+                amountBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+
+                amountInput.value = this.dataset.amount;
+                amountInput.focus();
+            });
+        });
+
+        amountInput.addEventListener('input', function () {
+            if (this.value) amountBtns.forEach(b => b.classList.remove('active'));
+        });
+
+        // =============================
+        // Validation + Loading
+        // =============================
+        const donationForm = document.querySelector('form');
+
+        donationForm.addEventListener('submit', function (e) {
+
+            if (!selectedCauseInput.value) {
+                e.preventDefault();
+                alert("Please select a cause before donating.");
+                return;
+            }
+
+            if (!amountInput.value || amountInput.value < 1) {
+                e.preventDefault();
+                alert("Please enter a valid donation amount.");
+                return;
+            }
+
+            const btn = donationForm.querySelector('button[type="submit"]');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
+            btn.disabled = true;
+        });
+
+    });
+</script>

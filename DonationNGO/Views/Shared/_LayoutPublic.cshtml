@@ -1,0 +1,638 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - HM Insurance</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+
+    <link href="~/css/site.css" rel="stylesheet" />
+</head>
+
+<style>
+    /* ===== MAIN LAYOUT VARIABLES ===== */
+    :root {
+        --primary-color: #4361ee;
+        --secondary-color: #3f37c9;
+        --success-color: #06d6a0;
+        --warning-color: #ffd166;
+        --info-color: #118ab2;
+        --danger-color: #ef476f;
+        --light-bg: #f8f9fa;
+        --dark-bg: #1e293b;
+        --text-dark: #2d3748;
+        --text-light: #718096;
+        --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        --card-radius: 12px;
+    }
+
+    /* ===== BASE STYLES ===== */
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: var(--light-bg);
+        color: var(--text-dark);
+        line-height: 1.6;
+        padding-top: 76px; /* Account for fixed navbar */
+    }
+
+    /* ===== NAVIGATION STYLING ===== */
+    .navbar {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        padding: 1rem 0;
+    }
+
+    .navbar-scrolled {
+        background: rgba(255, 255, 255, 0.98);
+        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        padding: 0.5rem 0;
+    }
+
+    .dash{
+        margin-left: 323px !important;  
+    }
+    .navbar-brand {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--primary-color) !important;
+    }
+
+    .nav-link {
+        font-weight: 500;
+        color: var(--text-dark) !important;
+        padding: 0.5rem 1rem !important;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        margin: 0 0.25rem;
+    }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white !important;
+            transform: translateY(-1px);
+        }
+
+    .navbar-toggler {
+        border: none;
+        padding: 0.25rem 0.5rem;
+    }
+
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+
+    /* ===== BUTTON STYLING ===== */
+    .btn {
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        border: none;
+        padding: 0.5rem 1.5rem;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        box-shadow: 0 4px 6px rgba(67, 97, 238, 0.2);
+    }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(67, 97, 238, 0.4);
+        }
+
+    .btn-outline-primary {
+        border: 2px solid var(--primary-color);
+        color: var(--primary-color);
+        background: transparent;
+    }
+
+        .btn-outline-primary:hover {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+    .btn-outline-danger {
+        border: 2px solid var(--danger-color);
+        color: var(--danger-color);
+        background: transparent;
+    }
+
+        .btn-outline-danger:hover {
+            background: linear-gradient(135deg, var(--danger-color), #dc2626);
+            border-color: var(--danger-color);
+            transform: translateY(-2px);
+        }
+
+    .btn-sm {
+        padding: 0.375rem 1rem;
+        font-size: 0.875rem;
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    main {
+        min-height: calc(100vh - 400px);
+    }
+
+    /* ===== FOOTER STYLING ===== */
+    .footer {
+        background: linear-gradient(135deg, var(--dark-bg), #0f172a);
+        color: white;
+        padding: 3rem 0 1.5rem;
+    }
+
+        .footer h5,
+        .footer h6 {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+            .footer h5 i {
+                color: var(--primary-color);
+            }
+
+        .footer p {
+            color: #cbd5e0;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer ul.list-unstyled li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer ul.list-unstyled a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+            .footer ul.list-unstyled a:hover {
+                color: white;
+                transform: translateX(5px);
+            }
+
+    .social-links {
+        display: flex;
+        gap: 1rem;
+    }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+            .social-links a:hover {
+                background: var(--primary-color);
+                transform: translateY(-2px);
+            }
+
+    .footer .input-group {
+        margin-top: 1rem;
+    }
+
+    .footer .form-control {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        border-radius: 8px 0 0 8px;
+    }
+
+        .footer .form-control::placeholder {
+            color: #94a3b8;
+        }
+
+        .footer .form-control:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(67, 97, 238, 0.25);
+            color: white;
+        }
+
+    .footer .btn {
+        border-radius: 0 8px 8px 0;
+    }
+
+    .footer hr {
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    /* ===== RESPONSIVE DESIGN ===== */
+    @@media (max-width: 768px) {
+        body {
+            padding-top: 70px;
+        }
+
+        .navbar {
+            padding: 0.75rem 0;
+        }
+
+        .navbar-collapse {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .nav-link {
+            margin: 0.25rem 0;
+            text-align: center;
+        }
+
+        .navbar-nav .btn {
+            margin: 0.5rem 0;
+            width: 100%;
+            text-align: center;
+        }
+
+        .footer .col-lg-4,
+        .footer .col-lg-2 {
+            margin-bottom: 2rem;
+        }
+
+        .footer .d-flex {
+            flex-direction: column;
+            text-align: center;
+            gap: 1rem;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .navbar-brand {
+            font-size: 1.25rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+        }
+
+        .footer {
+            padding: 2rem 0 1rem;
+        }
+
+        .social-links {
+            justify-content: center;
+        }
+    }
+
+    /* ===== ANIMATIONS ===== */
+    .nav-link,
+    .btn,
+    .social-links a {
+        transition: all 0.3s ease;
+    }
+
+    /* ===== UTILITY CLASSES ===== */
+    .fw-semibold {
+        font-weight: 600;
+    }
+
+    .text-primary {
+        color: var(--primary-color) !important;
+    }
+
+    /* ===== LOADING STATES ===== */
+    .btn.loading {
+        position: relative;
+        color: transparent;
+    }
+
+        .btn.loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin-left: -10px;
+            margin-top: -10px;
+            border: 2px solid transparent;
+            border-radius: 50%;
+            border-right-color: currentColor;
+            animation: spin 0.8s linear infinite;
+        }
+
+    @@keyframes spin {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* ===== ACCESSIBILITY ===== */
+    .btn:focus,
+    .nav-link:focus,
+    .form-control:focus {
+        outline: 2px solid var(--primary-color);
+        outline-offset: 2px;
+    }
+
+    /* ===== CUSTOM SCROLLBAR ===== */
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: var(--primary-color);
+        border-radius: 4px;
+    }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-color);
+        }
+</style>
+
+<body>
+    <!-- ================= NAVIGATION ================= -->
+    @{
+        var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+        var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+    }
+
+    <!-- ================= NAVIGATION ================= -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/">
+                <i class="fas fa-shield-alt"></i> HM Insurance
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+
+                <!-- LEFT MENU -->
+                <ul class="navbar-nav me-auto">
+                    @if (User.Identity != null && User.Identity.IsAuthenticated)
+                    {
+                        if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link @(currentController == "Home" && currentAction == "Index" ? "active" : "")" href="/">
+                                    Home
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(currentController == "Program" ? "active" : "")" href="/Program">
+                                    Policy
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(currentController == "Home" && currentAction == "About" ? "active" : "")" href="/Home/About">
+                                    About
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(currentController == "Query" ? "active" : "")" href="/Query">
+                                    Contact
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(currentController == "Gallery" ? "active" : "")" href="/Gallery">
+                                    Gallery
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link dash @(currentController == "Admin" && currentAction == "Dashboard" ? "active" : "")"
+                                   href="@Url.Action("Dashboard", "Admin")">
+                                    Admin Dashboard
+                                </a>
+                            </li>
+                        }
+                        else if (User.IsInRole("User"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link @(currentController == "Home" && currentAction == "Index" ? "active" : "")" href="/">
+                                    Home
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(currentController == "Program" ? "active" : "")" href="/Program">
+                                    Policy
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(currentController == "Home" && currentAction == "About" ? "active" : "")" href="/Home/About">
+                                    About
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(currentController == "Query" ? "active" : "")" href="/Query">
+                                    Contact
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(currentController == "Gallery" ? "active" : "")" href="/Gallery">
+                                    Gallery
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(currentController == "Home" && currentAction == "Partners" ? "active" : "")" href="/Home/Partners">
+                                    Partners
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(currentController == "Home" && currentAction == "HelpCentre" ? "active" : "")" href="/Home/HelpCentre">
+                                    Help
+                                </a>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        <!-- GUEST MENU -->
+                        <li class="nav-item">
+                            <a class="nav-link @(currentController == "Home" && currentAction == "Index" ? "active" : "")" href="/">
+                                Home
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(currentController == "Program" ? "active" : "")" href="/Program">
+                                Policy
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(currentController == "Home" && currentAction == "About" ? "active" : "")" href="/Home/About">
+                                About
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(currentController == "Query" ? "active" : "")" href="/Query">
+                                Contact
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(currentController == "Gallery" ? "active" : "")" href="/Gallery">
+                                Gallery
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(currentController == "Home" && currentAction == "Partners" ? "active" : "")" href="/Home/Partners">
+                                Partners
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(currentController == "Home" && currentAction == "HelpCentre" ? "active" : "")" href="/Home/HelpCentre">
+                                Help
+                            </a>
+                        </li>
+                    }
+                </ul>
+
+                <!-- RIGHT MENU -->
+                <ul class="navbar-nav">
+                    @if (User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("User"))
+                    {
+                        <!-- User Dropdown (only for normal users) -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle fw-semibold text-dark" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user me-1 text-primary"></i>@User.Identity.Name
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item" href="/User/Dashboard">
+                                        <i class="fas fa-user-circle me-1"></i>Profile
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="/Account/Logout">
+                                        <i class="fas fa-sign-out-alt me-1"></i>Logout
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    else if (User.Identity == null || !User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item me-2">
+                            <a class="btn btn-outline-primary @(currentController == "Account" && currentAction == "Login" ? "active" : "")" href="/Account/Login">
+                                <i class="fas fa-sign-in-alt me-1"></i>Login
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="btn btn-primary @(currentController == "Account" && currentAction == "Register" ? "active" : "")" href="/Account/Register">
+                                <i class="fas fa-user-plus me-1"></i>Get Started
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        @RenderBody()
+    </main>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="footer mt-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <h5 class="mb-3">
+                        <i class="fas fa-shield-alt"></i> HM Insurance
+                    </h5>
+                    <p>
+                        Providing reliable insurance solutions that protect your health, family, and future with trust, transparency, and care.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <h6>HM Insurance</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="/Home/About">About Us</a></li>
+                        <li><a href="/Program">Our Policies</a></li>
+                        <li><a href="/Home/Partners">Partners</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-2">
+                    <h6>Support</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="/Home/HelpCentre">Help Centre</a></li>
+                        <li><a href="/Query">Contact</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4">
+                    <h6>Stay Updated</h6>
+                    <p>Subscribe to our newsletter for updates.</p>
+                    <div class="input-group">
+                        <input type="email" class="form-control" placeholder="Enter your email" aria-label="Email subscription">
+                        <button class="btn btn-primary">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="my-4">
+
+            <div class="d-flex justify-content-between align-items-center">
+                <p class="mb-0">&copy; 2024 HM Insurance. All rights reserved.</p>
+                <p class="mb-0">Making a difference, one insurance at a time.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function () {
+            const navbar = document.getElementById('mainNav');
+            navbar.classList.toggle('navbar-scrolled', window.scrollY > 100);
+        });
+
+        // Add loading state to buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('button[type="submit"], .btn[href]');
+
+            buttons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    if (this.getAttribute('href') || this.type === 'submit') {
+                        this.classList.add('loading');
+                        setTimeout(() => {
+                            this.classList.remove('loading');
+                        }, 2000);
+                    }
+                });
+            });
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

@@ -1,0 +1,184 @@
+﻿@model IEnumerable<Insurence.Models.Gallery>
+@{
+    Layout = "_LayoutUser";
+    ViewData["Title"] = "Gallery";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="mb-0">Our Gallery</h4>
+    <div class="d-flex gap-2">
+        <select class="form-select" id="categoryFilter" style="width: 200px;">
+            <option value="">All Categories</option>
+            @if (Model != null)
+            {
+                var categories = Model.Select(g => g.Category).Distinct();
+                foreach (var cat in categories)
+                {
+                    <option value="@cat">@cat</option>
+                }
+            }
+        </select>
+    </div>
+</div>
+
+<div class="gallery-grid row g-4" id="galleryContainer">
+    @if (Model != null && Model.Any())
+    {
+        foreach (var img in Model)
+        {
+            <div class="col-lg-4 col-md-6 gallery-item" data-category="@img.Category">
+                <div class="card">
+                    <img src="~/@img.ImageUrl" alt="@img.Description" class="card-img-top img-fluid">
+                    <div class="card-body p-3">
+                        <h6 class="mb-1">@img.Category</h6>
+                        <p class="text-muted mb-0 small">@img.Description</p>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="col-12">
+            <div class="alert alert-info text-center">No gallery images found.</div>
+        </div>
+    }
+</div>
+
+
+@section Scripts {
+    <script>
+        // Enhanced category filter with smooth animations
+        document.getElementById('categoryFilter').addEventListener('change', function () {
+            const selected = this.value;
+            const items = document.querySelectorAll('#galleryContainer .gallery-item');
+            const container = document.getElementById('galleryContainer');
+
+            // Add loading state
+            container.style.opacity = '0.7';
+            container.style.pointerEvents = 'none';
+
+            setTimeout(() => {
+                let visibleCount = 0;
+
+                items.forEach(function (item) {
+                    if (selected === "" || item.getAttribute('data-category') === selected) {
+                        item.style.display = 'block';
+                        // Add animation
+                        item.style.animation = 'fadeInUp 0.5s ease-out';
+                        visibleCount++;
+                    } else {
+                        item.style.animation = 'fadeOut 0.3s ease-out';
+                        setTimeout(() => {
+                            item.style.display = 'none';
+                        }, 250);
+                    }
+                });
+
+                // Remove loading state
+                container.style.opacity = '1';
+                container.style.pointerEvents = 'auto';
+
+                // Show message if no results
+                if (visibleCount === 0 && selected) {
+                    showNoResultsMessage(selected);
+                } else {
+                    removeNoResultsMessage();
+                }
+
+            }, 150);
+        });
+
+        // Add fadeOut animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @@keyframes fadeOut {
+                from { opacity: 1; transform: scale(1); }
+                to { opacity: 0; transform: scale(0.8); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        function showNoResultsMessage(category) {
+            removeNoResultsMessage();
+
+            const message = document.createElement('div');
+            message.className = 'col-12 text-center py-5';
+            message.innerHTML = `
+                <div class="card bg-light border-0">
+                    <div class="card-body py-5">
+                        <i class="fas fa-images fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">No images found in "${category}"</h5>
+                        <p class="text-muted">Try selecting a different category or check back later for new images.</p>
+                        <button class="btn btn-primary mt-2" onclick="resetFilter()">
+                            Show All Images
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('galleryContainer').appendChild(message);
+        }
+
+        function removeNoResultsMessage() {
+            const existingMessage = document.querySelector('#galleryContainer .col-12.text-center');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+        }
+
+        function resetFilter() {
+            document.getElementById('categoryFilter').value = '';
+            document.getElementById('categoryFilter').dispatchEvent(new Event('change'));
+        }
+
+        // Add image loading optimization
+        document.addEventListener('DOMContentLoaded', function() {
+            const images = document.querySelectorAll('.card-img-top');
+
+            images.forEach(img => {
+                // Add loading state
+                img.addEventListener('load', function() {
+                    this.style.animation = 'fadeIn 0.5s ease-out';
+                });
+
+                // Handle image errors
+                img.addEventListener('error', function() {
+                    this.src = 'https://via.placeholder.com/400x250/4361ee/ffffff?text=Image+Not+Found';
+                    this.alt = 'Image not available';
+                });
+            });
+
+            // Add click effect to cards
+            const cards = document.querySelectorAll('.gallery-item .card');
+            cards.forEach(card => {
+                card.style.cursor = 'pointer';
+                card.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.98)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 150);
+                });
+            });
+        });
+
+        // Lazy loading for images
+        if ('IntersectionObserver' in window) {
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        img.classList.remove('lazy');
+                        imageObserver.unobserve(img);
+                    }
+                });
+            });
+
+            document.querySelectorAll('img[data-src]').forEach(img => {
+                imageObserver.observe(img);
+            });
+        }
+    </script>
+}
+

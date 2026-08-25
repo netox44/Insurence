@@ -1,0 +1,260 @@
+﻿@model IEnumerable<Insurence.Models.prmodel>
+@{
+    Layout = "_LayoutUser";
+    ViewData["Title"] = "Our Policies";
+}
+<div class="row g-4" id="programsContainer">
+    @foreach (var p in Model)
+    {
+        <div class="col-lg-4 col-md-6 program-card" data-category="@p.Category">
+            <div class="card h-100">
+                <img src="~/@p.ImageUrl" class="card-img-top" alt="@p.ProgramName" style="height:250px; object-fit:cover;">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h5 class="card-title">@p.ProgramName</h5>
+                        <span class="badge @(p.Category == "Education" ? "bg-primary" :
+                                                                              p.Category == "Healthcare" ? "bg-success" :
+                                                                              p.Category == "Environment" ? "bg-warning" : "bg-secondary")">
+                            @p.Category
+                        </span>
+                    </div>
+
+                    <p class="card-text text-muted">
+                        @p.Description
+                    </p>
+
+                    <div class="progress mb-3">
+                        @{
+                            // Calculate coverage usage dynamically
+                            var percent = p.FundingGoal > 0
+                            ? Math.Min((p.AmountRaised / p.FundingGoal) * 100, 100)
+                            : 0;
+                        }
+                        <div class="progress-bar" role="progressbar" style="width: @percent%"></div>
+                    </div>
+                    <div class="d-flex justify-content-between text-sm text-muted mb-3">
+                        <span>$@p.AmountRaised coverage utilized</span>
+                        <span>$@p.FundingGoal total coverage</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">
+                            <i class="fas fa-users me-1"></i>@p.DonorsCount policy holders
+                        </small>
+                        <div class="btn-group">
+                            <a href="/User/Donate?cause=@p.ProgramName" class="btn btn-primary btn-sm">
+                                <i class="fas fa-donate me-1"></i>Insure
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<!-- Insurance Categories Section -->
+<div class="card mt-5">
+    <div class="card-header"></div>
+    <div class="card-body">
+        <div class="row g-4">
+            <!-- Life Insurance -->
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="fas fa-shield-alt fa-2x text-primary mb-3"></i>
+                        <h5 class="card-title">Life Insurance</h5>
+                        <p class="text-muted">
+                            Protect your loved ones with long-term life insurance coverage and financial security.
+                        </p>
+                        <ul class="list-unstyled small text-muted mb-3">
+                            <li>✔ Coverage up to $500,000</li>
+                            <li>✔ Flexible premium options</li>
+                            <li>✔ Family income protection</li>
+                        </ul>
+                        <a href="/User/Donate" class="btn btn-primary w-100">Insure Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Health Insurance -->
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="fas fa-heartbeat fa-2x text-primary mb-3"></i>
+                        <h5 class="card-title">Health Insurance</h5>
+                        <p class="text-muted">
+                            Comprehensive medical insurance covering hospitalization, treatments, and emergencies.
+                        </p>
+                        <ul class="list-unstyled small text-muted mb-3">
+                            <li>✔ Cashless hospital services</li>
+                            <li>✔ Annual medical checkups</li>
+                            <li>✔ Emergency health coverage</li>
+                        </ul>
+                        <a href="/User/Donate" class="btn btn-primary w-100">Insure Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vehicle Insurance -->
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="fas fa-car fa-2x text-primary mb-3"></i>
+                        <h5 class="card-title">Vehicle Insurance</h5>
+                        <p class="text-muted">
+                            Reliable protection against accidents, theft, and unexpected vehicle repairs.
+                        </p>
+                        <ul class="list-unstyled small text-muted mb-3">
+                            <li>✔ Accident damage coverage</li>
+                            <li>✔ Theft protection</li>
+                            <li>✔ Fast and easy claims</li>
+                        </ul>
+                        <a href="/User/Donate" class="btn btn-primary w-100">Insure Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Home Insurance -->
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="fas fa-home fa-2x text-primary mb-3"></i>
+                        <h5 class="card-title">Home Insurance</h5>
+                        <p class="text-muted">
+                            Secure your home and valuables against fire, theft, and structural damage.
+                        </p>
+                        <ul class="list-unstyled small text-muted mb-3">
+                            <li>✔ Property damage coverage</li>
+                            <li>✔ Fire and theft protection</li>
+                            <li>✔ Asset value security</li>
+                        </ul>
+                        <a href="/User/Donate" class="btn btn-primary w-100">Insure Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Travel Insurance -->
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="fas fa-plane fa-2x text-primary mb-3"></i>
+                        <h5 class="card-title">Travel Insurance</h5>
+                        <p class="text-muted">
+                            Travel with confidence through medical, trip, and baggage protection coverage.
+                        </p>
+                        <ul class="list-unstyled small text-muted mb-3">
+                            <li>✔ Overseas medical protection</li>
+                            <li>✔ Trip cancellation coverage</li>
+                            <li>✔ Lost luggage assistance</li>
+                        </ul>
+                        <a href="/User/Donate" class="btn btn-primary w-100">Insure Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Business Insurance -->
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body text-center">
+                        <i class="fas fa-briefcase fa-2x text-primary mb-3"></i>
+                        <h5 class="card-title">Business Insurance</h5>
+                        <p class="text-muted">
+                            Protect your business from liabilities, losses, and operational risks.
+                        </p>
+                        <ul class="list-unstyled small text-muted mb-3">
+                            <li>✔ Liability risk protection</li>
+                            <li>✔ Inventory and asset coverage</li>
+                            <li>✔ Business continuity assurance</li>
+                        </ul>
+                        <a href="/User/Donate" class="btn btn-primary w-100">Insure Now</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // -------------------- Category Filter --------------------
+        document.getElementById('categoryFilter').addEventListener('change', function () {
+            const selected = this.value.toLowerCase();
+            const cards = document.querySelectorAll('.program-card');
+            const container = document.getElementById('programsContainer');
+
+            container.style.opacity = '0.7';
+            container.style.pointerEvents = 'none';
+
+            setTimeout(() => {
+                let anyVisible = false;
+                cards.forEach(card => {
+                    const cardCategory = card.getAttribute('data-category').toLowerCase();
+                    if (!selected || cardCategory === selected) {
+                        card.style.display = 'block';
+                        card.offsetHeight;
+                        card.style.opacity = '1';
+                        card.style.transform = 'scale(1)';
+                        anyVisible = true;
+                    } else {
+                        card.style.opacity = '0';
+                        card.style.transform = 'scale(0.8)';
+                        setTimeout(() => card.style.display = 'none', 300);
+                    }
+                });
+
+                container.style.opacity = '1';
+                container.style.pointerEvents = 'auto';
+
+                if (!anyVisible && selected) showNoResultsMessage(selected);
+                else removeNoResultsMessage();
+
+            }, 150);
+        });
+
+        function showNoResultsMessage(category) {
+            removeNoResultsMessage();
+            const message = document.createElement('div');
+            message.className = 'col-12 text-center py-5';
+            message.innerHTML = `
+                <div class="card bg-light border-0">
+                    <div class="card-body py-5">
+                        <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">No policies found in "${category}"</h5>
+                        <p class="text-muted">Please try another category or check back later.</p>
+                        <button class="btn btn-primary mt-2" onclick="resetFilter()">Show All Policies</button>
+                    </div>
+                </div>`;
+            document.getElementById('programsContainer').appendChild(message);
+        }
+
+        function removeNoResultsMessage() {
+            const existing = document.querySelector('#programsContainer .col-12.text-center');
+            if (existing) existing.remove();
+        }
+
+        function resetFilter() {
+            document.getElementById('categoryFilter').value = '';
+            document.getElementById('categoryFilter').dispatchEvent(new Event('change'));
+        }
+
+        // -------------------- Progress Bar Animation --------------------
+        document.addEventListener('DOMContentLoaded', function () {
+            const progressBars = document.querySelectorAll('.progress-bar');
+            progressBars.forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0';
+                setTimeout(() => bar.style.width = width, 500);
+            });
+
+            const cards = document.querySelectorAll('.program-card .card');
+            cards.forEach(card => {
+                card.addEventListener('click', e => {
+                    if (!e.target.closest('a')) {
+                        card.style.transform = 'scale(0.98)';
+                        setTimeout(() => card.style.transform = '', 150);
+                    }
+                });
+            });
+        });
+    </script>
+}

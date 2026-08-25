@@ -1,0 +1,84 @@
+﻿@model Insurence.Models.Donation
+
+@{
+    Layout = "_LayoutAdmin";
+    ViewData["Title"] = "Add Policy";
+}
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Add Policy</h5>
+            </div>
+            <div class="card-body">
+                @if (TempData["Success"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        @TempData["Success"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                <form asp-action="AddDonation" method="post">
+                    <div class="mb-3">
+                        <label asp-for="DonorName" class="form-label">Policy Name</label>
+                        <input asp-for="DonorName" class="form-control" placeholder="Enter Policy Name" />
+                        <span asp-validation-for="DonorName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Program" class="form-label">Add Insurance</label>
+                        <select asp-for="Program" class="form-select">
+                            <option value="">Select Policy</option>
+                            @foreach (var prog in ViewBag.Programs as List<string> ?? new List<string>())
+                            {
+                                <option value="@prog">@prog</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Program" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Amount" class="form-label">Amount</label>
+                        <input asp-for="Amount" class="form-control" type="number" step="0.01" placeholder="Enter amount" />
+                        <span asp-validation-for="Amount" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="PaymentMethod" class="form-label">Payment Method</label>
+                        <select asp-for="PaymentMethod" class="form-select">
+                            <option value="">Select Payment Method</option>
+                            <option value="Cash">Cash</option>
+                            <option value="Bank Transfer">Bank Transfer</option>
+                            <option value="Online Payment">Online Payment</option>
+                        </select>
+                        <span asp-validation-for="PaymentMethod" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Status" class="form-label">Status</label>
+                        <select asp-for="Status" class="form-select">
+                            <option value="">Select Status</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Failed">Failed</option>
+                        </select>
+                        <span asp-validation-for="Status" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Save Policy
+                    </button>
+                    <a asp-action="ManageDonations" class="btn btn-secondary ms-2">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Policy
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

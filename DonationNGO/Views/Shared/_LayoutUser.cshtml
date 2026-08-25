@@ -1,0 +1,432 @@
+﻿@{
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - HM Insurance</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="~/css/site.css" rel="stylesheet" />
+</head>
+
+<style>
+    /* ===== USER LAYOUT VARIABLES ===== */
+    :root {
+        --primary-color: #4361ee;
+        --secondary-color: #3f37c9;
+        --success-color: #06d6a0;
+        --warning-color: #ffd166;
+        --info-color: #118ab2;
+        --danger-color: #ef476f;
+        --light-bg: #f8f9fa;
+        --sidebar-bg: #2d3748;
+        --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        --card-radius: 12px;
+    }
+
+    /* ===== BASE STYLES ===== */
+    body {
+        background-color: var(--light-bg);
+        font-family: 'Poppins', sans-serif;
+        overflow-x: hidden;
+    }
+
+    .container-fluid {
+        background-color: var(--light-bg);
+        min-height: 100vh;
+        padding: 0;
+    }
+
+    /* ===== SIDEBAR STYLING ===== */
+    .sidebar-admin {
+        background: linear-gradient(180deg, var(--sidebar-bg) 0%, #1a202c 100%) !important;
+        min-height: 100vh;
+        position: sticky;
+        top: 0;
+        transition: all 0.3s ease;
+    }
+
+        .sidebar-admin .nav-link {
+            color: #cbd5e0 !important;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            padding: 0.75rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+            .sidebar-admin .nav-link:hover {
+                background-color: rgba(255, 255, 255, 0.1);
+                color: white !important;
+                transform: translateX(5px);
+            }
+
+            .sidebar-admin .nav-link.active {
+                background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+                color: white !important;
+                box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+            }
+
+    /* ===== MAIN CONTENT AREA ===== */
+    .ml-sm-auto {
+        background-color: var(--light-bg);
+        min-height: 100vh;
+    }
+
+    /* ===== TOP BAR STYLING ===== */
+    .d-flex.justify-content-between.align-items-center.mb-4 {
+        background: white;
+        padding: 1.5rem;
+        border-radius: var(--card-radius);
+        box-shadow: var(--card-shadow);
+        margin: 1.5rem 1.5rem 1.5rem 0;
+    }
+
+    /* ===== CARD STYLING ===== */
+    .card {
+        border: none;
+        border-radius: var(--card-radius);
+        box-shadow: var(--card-shadow);
+        margin-bottom: 1.5rem;
+        transition: all 0.3s ease;
+    }
+
+        .card:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+    .card-header {
+        background: white;
+        border-bottom: 1px solid #e2e8f0;
+        padding: 1.25rem 1.5rem;
+        font-weight: 600;
+        color: #2d3748;
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    /* ===== BUTTON STYLING ===== */
+    .btn {
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        border: none;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        box-shadow: 0 4px 6px rgba(67, 97, 238, 0.2);
+    }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(67, 97, 238, 0.4);
+        }
+
+    .btn-outline-primary {
+        border: 1px solid var(--primary-color);
+        color: var(--primary-color);
+    }
+
+        .btn-outline-primary:hover {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.2);
+        }
+
+    .btn-outline-danger {
+        border: 1px solid var(--danger-color);
+        color: var(--danger-color);
+    }
+
+        .btn-outline-danger:hover {
+            background: linear-gradient(135deg, var(--danger-color), #dc2626);
+            border-color: var(--danger-color);
+            transform: translateY(-2px);
+        }
+
+    /* ===== STATISTICS CARDS ===== */
+    .stat-card {
+        background: white;
+        border-radius: var(--card-radius);
+        padding: 1.5rem;
+        box-shadow: var(--card-shadow);
+        height: 100%;
+        transition: all 0.3s ease;
+        border-left: 4px solid transparent;
+    }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-card:nth-child(1) {
+            border-left-color: var(--primary-color);
+        }
+
+        .stat-card:nth-child(2) {
+            border-left-color: var(--success-color);
+        }
+
+        .stat-card:nth-child(3) {
+            border-left-color: var(--warning-color);
+        }
+
+        .stat-card:nth-child(4) {
+            border-left-color: var(--info-color);
+        }
+
+    .stat-number {
+        font-weight: 700;
+        font-size: 1.8rem;
+        color: #2d3748;
+        margin-bottom: 0.25rem;
+    }
+
+    .stat-label {
+        color: #718096;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+    /* ===== TABLE STYLING ===== */
+    .table-responsive {
+        border-radius: var(--card-radius);
+        overflow: hidden;
+    }
+
+    .table {
+        margin-bottom: 0;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+        .table > :not(caption) > * > * {
+            padding: 1rem 0.75rem;
+            vertical-align: middle;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .table th {
+            font-weight: 600;
+            background-color: #f8f9fa;
+            color: #4a5568;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+    .table-hover tbody tr {
+        transition: all 0.2s ease;
+    }
+
+        .table-hover tbody tr:hover {
+            background: linear-gradient(90deg, rgba(67, 97, 238, 0.05) 0%, rgba(67, 97, 238, 0.02) 100%);
+            transform: translateX(3px);
+        }
+
+    /* ===== BADGE STYLING ===== */
+    .badge {
+        font-size: 0.75rem;
+        padding: 0.5em 0.75em;
+        font-weight: 500;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+    }
+
+        .badge:hover {
+            transform: scale(1.05);
+        }
+
+    .bg-success {
+        background: linear-gradient(135deg, var(--success-color), #05b888) !important;
+    }
+
+    .bg-warning {
+        background: linear-gradient(135deg, var(--warning-color), #ffc745) !important;
+        color: #000 !important;
+    }
+
+    .bg-primary {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+    }
+
+    .bg-secondary {
+        background: linear-gradient(135deg, #64748b, #475569) !important;
+    }
+
+    /* ===== FORM STYLING ===== */
+    .form-control, .form-select {
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+        padding: 0.75rem 1rem;
+        transition: all 0.3s ease;
+        font-size: 0.95rem;
+    }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(67, 97, 238, 0.25);
+            transform: translateY(-1px);
+        }
+
+    textarea.form-control {
+        resize: vertical;
+        min-height: 120px;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #4a5568;
+        margin-bottom: 0.5rem;
+    }
+
+    /* ===== MOBILE RESPONSIVENESS ===== */
+    @@media (max-width: 768px) {
+        .container-fluid {
+            padding: 0 !important;
+        }
+
+        .sidebar-admin {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 280px;
+            height: 100vh;
+            z-index: 1000;
+            transition: left 0.3s ease;
+        }
+
+            .sidebar-admin.mobile-show {
+                left: 0;
+            }
+
+        .col-lg-10 {
+            margin-left: 0 !important;
+            width: 100%;
+        }
+
+        .d-flex.justify-content-between.align-items-center.mb-4 {
+            margin: 1rem;
+            flex-direction: column;
+            align-items: flex-start !important;
+        }
+
+        .mobile-menu-toggle {
+            display: block !important;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1001;
+            background: var(--primary-color);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            padding: 10px 12px;
+            font-size: 1.2rem;
+        }
+    }
+
+    /* Mobile menu toggle - hidden on desktop */
+    .mobile-menu-toggle {
+        display: none;
+    }
+</style>
+
+<body class="bg-light">
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-2 bg-dark sidebar-admin">
+                <div class="d-flex flex-column flex-shrink-0 p-3 text-white">
+                    <div class="d-flex align-items-center mb-4">
+                        <img src="/images/programs/UserProfile.png" alt="User" class="rounded-circle me-2" width="40" height="40">
+                        <div>
+                            <strong>@(User.Identity != null ? User.Identity.Name : "User")</strong>
+                        </div>
+                    </div>
+                    <ul class="nav nav-pills flex-column mb-auto">
+                        <li class="nav-item">
+                            <a href="/User/Dashboard" class="nav-link @(currentController == "User" && currentAction == "Dashboard" ? "active" : "")">
+                                <i class="fas fa-chart-line me-2"></i>Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/User/Donate" class="nav-link @(currentController == "User" && currentAction == "Donate" ? "active" : "")">
+                                <i class="fas fa-donate me-2"></i>Make Insurance
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/User/MyDonations" class="nav-link @(currentController == "User" && currentAction == "MyDonations" ? "active" : "")">
+                                <i class="fas fa-history me-2"></i>My Insurance
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/User/Programs" class="nav-link @(currentController == "User" && currentAction == "Programs" ? "active" : "")">
+                                <i class="fas fa-project-diagram me-2"></i>Policy
+                            </a>
+                        </li>
+                        <li class="mt-2">
+                            <a href="/" class="nav-link">
+                                <i class="fas fa-home me-2"></i>Back to Website
+                            </a>
+                        </li>
+                        <li class="mt-3">
+                            <a href="/Account/Logout" class="btn btn-outline-light btn-sm w-100">
+                                <i class="fas fa-sign-out-alt me-1"></i>Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-lg-10 ml-sm-auto px-4 py-4">
+                <!-- Top Bar -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="mb-0">@ViewData["Title"]</h4>
+                    <div class="d-flex align-items-center">
+                    </div>
+                </div>
+
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Mobile menu functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+            const sidebar = document.querySelector('.sidebar-admin');
+
+            if (mobileMenuToggle && sidebar) {
+                mobileMenuToggle.addEventListener('click', function() {
+                    sidebar.classList.toggle('mobile-show');
+                });
+
+                document.addEventListener('click', function(event) {
+                    if (window.innerWidth <= 768) {
+                        if (!sidebar.contains(event.target) && !mobileMenuToggle.contains(event.target)) {
+                            sidebar.classList.remove('mobile-show');
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
